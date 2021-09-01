@@ -5,7 +5,9 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -22,6 +24,9 @@ type Data struct {
 }
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalln(err)
+	}
 	app := echo.New()
 	app.Use(middleware.CORS())
 	app.Use(middleware.Logger())
@@ -29,7 +34,7 @@ func main() {
 	app.GET("/mor-sac/:place", func(c echo.Context) error {
 		place := c.Param("place")
 
-		url := "https://api.mymappi.com/v2/geocoding/direct?apikey=0876a809-8921-4bb7-bd2d-f2069c9951e0&q=" + place
+		url := "https://api.mymappi.com/v2/geocoding/direct?apikey=" + os.Getenv("API_TOKEN") + "&q=" + place
 		res, err := http.Get(url)
 		if err != nil {
 			log.Fatalln(err)
@@ -48,5 +53,5 @@ func main() {
 		return c.JSON(http.StatusOK, location)
 	})
 
-	app.Start(":8081")
+	app.Start(":" + os.Getenv("PORT"))
 }
