@@ -1,0 +1,9 @@
+{
+    "ImportPath": "api.mymappi",
+    "GoVersion": "go1.16.6",
+    "GodepVersion": "v74",
+    "Package": [
+        "./.."
+    ],
+    "Deps": []
+}
